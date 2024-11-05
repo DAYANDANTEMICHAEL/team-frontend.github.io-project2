@@ -168,7 +168,7 @@
   <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400" on:click={previousPage} disabled={currentPage === 1}>
     Back
   </button>
-  <p>Page {currentPage} of {Math.ceil(events.length / eventsPerPage)}</p>
+  <p>Page {currentPage} of {Math.max(1, Math.ceil(events.length / eventsPerPage))}</p>
   <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700" on:click={nextPage} disabled={currentPage * eventsPerPage >= events.length}>
     Next
   </button>
