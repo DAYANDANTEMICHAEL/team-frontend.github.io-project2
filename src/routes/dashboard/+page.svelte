@@ -101,12 +101,12 @@
   });
 </script>
 <Headbar />
-<div class="flex flex-col h-[calc(100vh-64px)] overflow-hidden p-4">
-  <button class="bg-blue-500 text-white px-4 py-2 rounded mb-4 hover:bg-blue-700" on:click={toggleAddEventPopup}>Add Event</button>
+<div class="flex flex-col h-[calc(100vh-64px)] overflow-hidden p-6">
+  <button class="bg-blue-600 text-white px-5 py-3 rounded-lg mb-4 hover:bg-blue-700 transition duration-200" on:click={toggleAddEventPopup}>Add Event</button>
   
   {#if showAddEventPopup}
     <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div class="bg-white p-4 rounded relative">
+      <div class="bg-white p-6 rounded-lg shadow-lg relative max-w-md w-full">
         <button on:click={toggleAddEventPopup} class="absolute top-2 right-2 text-gray-500 hover:text-gray-800">
           &times;
         </button>
@@ -117,59 +117,109 @@
   
   {#if confirmDeleteEvent}
     <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div class="bg-white p-4 rounded relative">
+      <div class="bg-white p-6 rounded-lg shadow-lg relative max-w-md w-full">
         <h2 class="text-lg font-bold">Are you sure you want to delete it?</h2>
         <div class="mt-4 flex justify-center">
-          <button on:click={deleteConfirmed} class="bg-red-500 text-white px-4 py-2 rounded mr-2">Yes</button>
-          <button on:click={cancelDelete} class="bg-gray-300 text-gray-700 px-4 py-2 rounded">No</button>
+          <button on:click={deleteConfirmed} class="bg-red-600 text-white px-4 py-2 rounded-lg mr-2 hover:bg-red-700 transition duration-200">Yes</button>
+          <button on:click={cancelDelete} class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200">No</button>
         </div>
       </div>
     </div>
   {/if}
   
-  <table class="min-w-full border-collapse border border-gray-300">
-    <thead>
-      <tr class="bg-gray-100">
-        <th class="border border-gray-300 px-4 py-2">Email</th>
-        <th class="border border-gray-300 px-4 py-2">Contact</th>
-        <th class="border border-gray-300 px-4 py-2">Event Name</th>
-        <th class="border border-gray-300 px-4 py-2">Start Time</th>
-        <th class="border border-gray-300 px-4 py-2">End Time</th>
-        <th class="border border-gray-300 px-4 py-2">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each events.slice((currentPage - 1) * eventsPerPage, currentPage * eventsPerPage) as event}
-        <tr class={new Date(event.startTime) < new Date() ? 'bg-gray-200' : ''}>
-          <td class="border border-gray-300 px-4 py-2 text-center">{event.name}</td>
-          <td class="border border-gray-300 px-4 py-2 text-center">{event.contactNumber}</td>
-          <td class="border border-gray-300 px-4 py-2 text-center">{event.eventName}</td>
-          <td class="border border-gray-300 px-4 py-2 text-center">{formatDateTime(event.startTime)}</td>
-          <td class="border border-gray-300 px-4 py-2 text-center">{formatDateTime(event.endTime)}</td>
-          <td class="border border-gray-300 px-4 py-2 text-center">
-            <button class="text-red-500 hover:text-red-700" on:click={() => confirmDelete(event)}>
-              <i class="fas fa-trash"></i> <!-- FontAwesome Delete Icon -->
-              Delete
-            </button>
-          </td>
-        </tr>
-      {/each}
-      {#if events.length === 0}
+  <div class="overflow-x-auto">
+    <table class="min-w-full border-collapse border border-gray-300 shadow-md">
+      <thead class="bg-gray-200">
         <tr>
-          <td class="border border-gray-300 px-4 py-2 text-center" colspan="6">No events available</td>
+          <th class="border border-gray-300 px-4 py-2">Email</th>
+          <th class="border border-gray-300 px-4 py-2">Contact</th>
+          <th class="border border-gray-300 px-4 py-2">Event Name</th>
+          <th class="border border-gray-300 px-4 py-2">Start Time</th>
+          <th class="border border-gray-300 px-4 py-2">End Time</th>
+          <th class="border border-gray-300 px-4 py-2">Actions</th>
         </tr>
-      {/if}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {#each events.slice((currentPage - 1) * eventsPerPage, currentPage * eventsPerPage) as event}
+          <tr class={new Date(event.startTime) < new Date() ? 'bg-gray-100' : ''}>
+            <td class="border border-gray-300 px-4 py-2 text-center">{event.name}</td>
+            <td class="border border-gray-300 px-4 py-2 text-center">{event.contactNumber}</td>
+            <td class="border border-gray-300 px-4 py-2 text-center">{event.eventName}</td>
+            <td class="border border-gray-300 px-4 py-2 text-center">{formatDateTime(event.startTime)}</td>
+            <td class="border border-gray-300 px-4 py-2 text-center">{formatDateTime(event.endTime)}</td>
+            <td class="border border-gray-300 px-4 py-2 text-center">
+              <button class="text-red-600 hover:text-red-700" on:click={() => confirmDelete(event)}>
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </td>
+          </tr>
+        {/each}
+        {#if events.length === 0}
+          <tr>
+            <td class="border border-gray-300 px-4 py-2 text-center" colspan="6">No events available</td>
+          </tr>
+        {/if}
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <!-- Fixed Navigation Buttons at the very end -->
 <div class="fixed bottom-0 left-0 right-0 bg-white shadow-md p-4 flex justify-between">
-  <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400" on:click={previousPage} disabled={currentPage === 1}>
+  <button class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200" on:click={previousPage} disabled={currentPage === 1}>
     Back
   </button>
   <p>Page {currentPage} of {Math.max(1, Math.ceil(events.length / eventsPerPage))}</p>
-  <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700" on:click={nextPage} disabled={currentPage * eventsPerPage >= events.length}>
+  <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200" on:click={nextPage} disabled={currentPage * eventsPerPage >= events.length}>
     Next
   </button>
 </div>
+
+<style>
+  /* Existing styles... */
+
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .flex {
+      flex-direction: column; /* Stack elements vertically on small screens */
+      align-items: center; /* Center align items */
+    }
+
+    .overflow-x-auto {
+      overflow-x: auto; /* Allow horizontal scrolling for tables */
+      width: 100%; /* Ensure it takes full width */
+    }
+
+    table {
+      width: 100%; /* Make the table full width */
+      font-size: 14px; /* Adjust font size for better readability */
+      border-collapse: collapse; /* Ensure borders collapse for better appearance */
+    }
+
+    th, td {
+      padding: 8px; /* Reduce padding for smaller screens */
+      text-align: center; /* Center align text in table cells */
+    }
+
+    .fixed {
+      position: relative; /* Change fixed position to relative for mobile */
+      bottom: auto; /* Reset bottom positioning */
+      margin-top: 20px; /* Add margin for spacing */
+    }
+
+    button {
+      width: 100%; /* Make buttons full width */
+      margin-bottom: 10px; /* Add spacing between buttons */
+    }
+
+    h2 {
+      text-align: center; /* Center align headings */
+      margin: 10px 0; /* Add margin for spacing */
+    }
+
+    .bg-white {
+      margin: 10px; /* Add margin to white background elements */
+      width: calc(100% - 20px); /* Adjust width for margins */
+    }
+  }
+</style>

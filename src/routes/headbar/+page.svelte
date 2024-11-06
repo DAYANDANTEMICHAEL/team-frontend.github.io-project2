@@ -29,14 +29,30 @@
   });
 </script>
 
-<nav class="bg-green-500 p-4 flex justify-between items-center">
+<nav class="bg-green-500 p-4 flex flex-col md:flex-row justify-between items-center">
   <div class="text-white text-lg font-bold">
-    EVENT Scheduling
+    EVENT SCHEDULER
   </div>
-  <div class="text-white text-lg">
-    {currentDateTime} <!-- Display current date and time -->
+  <div class="date-time-container text-white text-lg mt-2 md:mt-0">
+    {currentDateTime}
   </div>
-  <button class="text-white font-semibold" on:click={handleLogout}>
-    Log Out
+  <button class="text-white font-semibold mt-2 md:mt-0 logout-button" on:click={handleLogout}>
+    <i class="fas fa-sign-out-alt"></i>
   </button>
 </nav>
+
+<style>
+  @media (max-width: 648px) {
+    .logout-button {
+      margin-left: auto;
+    }
+    .date-time-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+    }
+  }
+</style>
+
+
